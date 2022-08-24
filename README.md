@@ -1,1 +1,1 @@
-# JS-Md12-Map-Activity
+# Milestone-Project-1
