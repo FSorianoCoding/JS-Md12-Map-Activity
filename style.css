@@ -1,0 +1,16 @@
+#map { 
+    height: 500px; 
+    background-color: grey;
+}
+
+/* W3 has before has before as code literally before content
+   First time seeing it used a prescreen before the map is loading.  */
+#map::before{
+    content: 'Loading... please wait.';
+    font-size: 28px;
+    text-align: center;
+    width: 100%;
+    position: absolute;
+    margin-top: 8em;
+}
+
