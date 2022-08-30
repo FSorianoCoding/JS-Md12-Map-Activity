@@ -15,7 +15,7 @@
 const myMap = {
     // had to look up appropriate brackets to use.
     // create the coordinates and businesses as arrays to work with in the myMap like in the sandwich activity.
-    coordinates: [],
+    coordinates: [],   // users coordinates inserted here from window.onload and createMap
     businesses: [],
     // map and markers become objects?    
     map: {},
@@ -67,6 +67,9 @@ async function getCoords(){
 }
 // console.log(getCoords());
 
+
+
+
 // foursquare search code? Was able to figure out how to get the options code
 // But I would have not figured out that Foursquare code needed to be wrapped as an async as well.
 async function getFoursquare(business){
@@ -79,19 +82,20 @@ async function getFoursquare(business){
     }
 
     // let limit = 5
-    // Corresponds to the myMap array?
+    // lat and let corresponds to the myMap array from when window.onload created leaflet myMap using users coordinates.
     let lat = myMap.coordinates[0]
     let lon = myMap.coordinates[1]
     let response = await fetch(`https://api.foursquare.com/v3/places/search?&query=${business}&ll=${lat}%2C${lon}&limit=5`, options)
     // my code that came from foursquare was not working.
     // let response = await fetch('https://api.foursquare.com/v3/places/search?query=business', options)
-    // not sure where the parsedData code comes from.
-    let jsonString = await response.text()
-	let data = JSON.parse(jsonString)
-	let businesses = data.results
+    // let jsonString = await response.text()           
+    // skipped awaiting response.text() and parsing it immediately with .json
+	
+    let data = await response.json()
+	let businesses = data.results      // .results contains value returned by 'data' that was fetched by foursquare api.
     console.log(business)
 	return businesses
-    // part of original code that was no pulling responses for fourSquare
+    // part of original code that was not pulling responses for fourSquare
     // .then(response => response.json())
     // .then(response => console.log(response))
     // .catch(err => console.error(err));
@@ -116,6 +120,8 @@ function processBusinesses(data) {
 
 // The onload event occurs when an object has been loaded.
 // Look almost similar to build ad1 and ad2 code from previous module.
+// define coords to await for users coordinates to be obtained.
+// define myMap.coordinates to equal the newly obtained coordinates to insert above in so myMap can be created.
 window.onload = async () => {
 	const coords = await getCoords()
     myMap.coordinates = coords
@@ -128,6 +134,7 @@ window.onload = async () => {
 // does not appear to be logging businesses on my map.
 // browser saying cannot read properties of null
 // FIXED, turns out html id was misspelled as 'sumbit'.
+// Still unsure how event.preventDefault() fits in here.
 let submitButt = document.getElementById('submit')
 submitButt.addEventListener("click", async (event) => {
         event.preventDefault();
